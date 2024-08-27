@@ -1,4 +1,5 @@
 ﻿
+@model  WebAtividadeEntrevista.Models.ClienteModel
 <form id="formCadastro" method="post">
     <div class="row">
         <div class="col-md-6">
@@ -29,6 +30,50 @@
         </div>
 
     </div>
+
+    <div class="modal fade" id="modalBeneficiarios" tabindex="-1" role="dialog" aria-labelledby="modalBeneficiariosLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalBeneficiariosLabel">Beneficiários</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" id="cpfBeneficiario" class="form-control" placeholder="CPF">
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" id="nomeBeneficiario" class="form-control" placeholder="Nome">
+                        </div>
+                    </div>
+                    <br />
+                    <button id="btnIncluirBeneficiario" class="btn btn-success">Incluir</button>
+                    <br /><br />
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>CPF</th>
+                                <th>Nome</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="beneficiariosTableBody">
+                            <!-- Os beneficiários serão adicionados dinamicamente aqui -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <div class="row">
         <div class="col-md-4">
             <div class="form-group">
@@ -79,7 +124,14 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-6">
+            <div class="pull-left">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalBeneficiarios">
+                    Beneficiários
+                </button>
+            </div>
+        </div>
+        <div class="col-lg-6">
             <div class="pull-right">
                 <button type="submit" class="btn btn-sm btn-success">Salvar</button>
                 @Html.ActionLink("Voltar", "Index", "Cliente", new { }, new { @class = "btn btn-sm btn-danger" })
@@ -89,3 +141,17 @@
 
 
 </form>
+
+<div id="model" class="modal fade" role="dialog" />
+
+@section scripts{
+    <script type="text/javascript">
+        $(".beneficiario").click(function () {
+            var model = $(this).attr("data-bind");
+            alert(model);
+            $("#modal").load("@Url.Action("Incluir","Beneficiario")", function () {
+                $("#modal").modal();
+            })
+        });
+    </script>
+}

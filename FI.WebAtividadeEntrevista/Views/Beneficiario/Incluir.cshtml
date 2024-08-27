@@ -1,0 +1,94 @@
+﻿@model IEnumerable<WebAtividadeEntrevista.Models.BeneficiarioModel>
+
+@{
+    ViewBag.Title = "Incluir";
+}
+<div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span><span class="sr-only">Fechar</span>
+                </button>
+                <h4 class="modal-title">Beneficiario</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="CPF">CPF:</label>
+                            <input required="required" type="text" class="form-control" id="CPF" name="CPF" maxlength="14">
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="Nome">Nome:</label>
+                            <input required="required" type="text" class="form-control" id="Nome" name="Nome" placeholder="Ex.: João da Silva" maxlength="50">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <br />
+                            <button type="submit" class="btn btn-sm btn-success">Incluir</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">$(document).ready(function () {
+            $('#btnIncluirBeneficiario').click(function () {
+                var cpf = $('#cpfBeneficiario').val();
+                var nome = $('#nomeBeneficiario').val();
+                var idCliente = $('#IdCliente').val(); // Certifique-se que o campo IdCliente está disponível na view principal
+
+                if (cpf && nome && idCliente) {
+                    $.ajax({
+                        url: '/Beneficiario/Incluir',
+                        type: 'POST',
+                        data: {
+                            CPF: cpf,
+                            Nome: nome,
+                            IdCliente: idCliente
+                        },
+                        success: function (response) {
+                            if (response.sucesso) {
+                                // Atualiza a tabela com o novo beneficiário
+                                var newRow = `
+                                    <tr>
+                                        <td>${cpf}</td>
+                                        <td>${nome}</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-warning btnAlterar">Alterar</button>
+                                            <button class="btn btn-sm btn-danger btnExcluir">Excluir</button>
+                                        </td>
+                                    </tr>
+                                `;
+                                $('#beneficiariosTableBody').append(newRow);
+
+                                // Limpar campos do modal
+                                $('#cpfBeneficiario').val('');
+                                $('#nomeBeneficiario').val('');
+
+                                // Fechar modal se necessário
+                                $('#modalBeneficiarios').modal('hide');
+                            } else {
+                                alert('Erro: ' + response.mensagem);
+                            }
+                        },
+                        error: function (error) {
+                            alert('Erro ao incluir beneficiário: ' + error.responseText);
+                        }
+                    });
+                } else {
+                    alert('Preencha todos os campos.');
+                }
+            });
+        });</script>
