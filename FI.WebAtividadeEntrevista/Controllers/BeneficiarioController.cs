@@ -12,25 +12,10 @@ namespace WebAtividadeEntrevista.Controllers
 {
     public class BeneficiarioController : Controller
     {
-        public JsonResult Incluir(BeneficiarioModel model)
+        public ActionResult Incluir()
         {
-            if (!ModelState.IsValid)
-            {
-                return Json(new { success = false, message = "Preencha os campos obrigatórios." });
-            }
-
-            var beneficiario = model.GetBeneficiario(model.IdCliente);
-            var idGerado = BoBeneficiario.Incluir(beneficiario);
-
-            if (idGerado > 0)
-            {
-                var listaBeneficiarios = BoBeneficiario.ConsultarPeloCliente(beneficiario.IdCliente);
-                return Json(new { success = true, data = listaBeneficiarios });
-            }
-
-            return Json(new { success = false, message = "Erro ao incluir o beneficiário." });
+            return View();
         }
-
 
         // GET: Beneficiario/Edit/5
         [HttpGet]
